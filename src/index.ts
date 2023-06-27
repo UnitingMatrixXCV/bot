@@ -74,6 +74,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         content: `Pong! \`${client.ws.ping}ms\``,
         ephemeral: true,
       });
+    } else if (commandName === 'say') {
       await sayCommand(interaction);
     } else if (commandName === 'tag') {
       await tagsCommand(interaction);
