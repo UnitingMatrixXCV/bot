@@ -15,7 +15,7 @@ const optifineAnalyzer: Analyzer = async (text) => {
   if (matchesOptifine) {
     return [
       'Incompatible with OptiFine',
-      "OptiFine breaks with Steam 'n' Rails\nCheck `/tag optifine` for more info & alternatives you can use.",
+      "OptiFine breaks Steam 'n' Rails and is Incompatible\n\nCheck `/tag optifine` for more info & alternatives you can use.",
     ];
   }
   return null;

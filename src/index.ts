@@ -6,7 +6,6 @@ import { parseLog } from './logs';
 import { tagsCommand } from './commands/tags';
 import { sayCommand } from './commands/say';
 
-import { green, bold, yellow } from 'kleur/colors';
 import 'dotenv/config';
 
 const client = new Client({
@@ -24,7 +23,7 @@ const client = new Client({
 });
 
 client.once('ready', async () => {
-  console.log(green('Discord bot ready!'));
+  console.log('Discord bot ready!');
 
   if (process.env.LOGS_CHANNEL) {
     const logsChannel = await client.channels.fetch(process.env.LOGS_CHANNEL);
@@ -35,7 +34,7 @@ client.once('ready', async () => {
   }
 
   if (process.env.NODE_ENV !== 'development')
-    console.warn(yellow(bold('Running in production mode!')));
+    console.warn('Running in production mode!');
 
   client.user?.presence.set({
     activities: [{ name: `Steam 'n' Rails` }],
