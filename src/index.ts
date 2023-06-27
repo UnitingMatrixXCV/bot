@@ -6,7 +6,7 @@ import { parseLog } from './logs';
 import { tagsCommand } from './commands/tags';
 import { sayCommand } from './commands/say';
 
-import { green, bold, yellow, cyan } from 'kleur/colors';
+import { green, bold, yellow } from 'kleur/colors';
 import 'dotenv/config';
 
 const client = new Client({

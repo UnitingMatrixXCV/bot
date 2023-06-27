@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: Layers-of-Railways/bot
+  IMAGE_NAME: layers-of-railways/bot
 
 permissions:
   contents: read
