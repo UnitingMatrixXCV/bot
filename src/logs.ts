@@ -36,8 +36,8 @@ const modernFixAnalyzer: Analyzer = async (text) => {
   const matchesWrongVersions = text.match(/modernfix/);
   if (matchesWrongVersions) {
     return [
-      'Incompatible with ModernFix',
-      "Steam 'n' Rails is currently incompatible with ModernFix.\n\nModernFix is working on an update that will make it compatible.",
+      'Incompatible with your version of ModernFix',
+      "Steam 'n' Rails is only compatible with the most recent version of ModernFix. Please update ModernFix.",
     ];
   }
   return null;
