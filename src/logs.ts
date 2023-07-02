@@ -22,17 +22,28 @@ const optifineAnalyzer: Analyzer = async (text) => {
 };
 
 const versionAnalyzer: Analyzer = async (text) => {
-  const matchesWrongVersions = text.match(/1.19.3/) || ext.match(/1.19.4/);
+  const matchesWrongVersions = text.match(/1.19.3/) || text.match(/1.19.4/);
   if (matchesWrongVersions) {
     return [
       'Incompatible with that version of Minecraft',
-      "Steam 'n' Rails is currently only compatible with MC 1.18.2 and 1.19.2.",
+      "Steam 'n' Rails is currently only compatible with MC 1.18.2 and 1.19.2.", //modernfix
     ];
   }
   return null;
 };
 
-const analyzers: Analyzer[] = [optifineAnalyzer, versionAnalyzer];
+const modernFixAnalyzer: Analyzer = async (text) => {
+  const matchesWrongVersions = text.match(/modernfix/);
+  if (matchesWrongVersions) {
+    return [
+      'Incompatible with ModernFix',
+      "Steam 'n' Rails is currently incompatible with ModernFix.\n\nModernFix is working on an update that will make it compatible.",
+    ];
+  }
+  return null;
+};
+
+const analyzers: Analyzer[] = [optifineAnalyzer, versionAnalyzer, modernFixAnalyzer];
 
 const providers: LogProvider[] = [
   readMcLogs,
