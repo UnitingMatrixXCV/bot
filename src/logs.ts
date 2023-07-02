@@ -21,7 +21,18 @@ const optifineAnalyzer: Analyzer = async (text) => {
   return null;
 };
 
-const analyzers: Analyzer[] = [optifineAnalyzer];
+const versionAnalyzer: Analyzer = async (text) => {
+  const matchesWrongVersions = text.match(/1.19.3/) || ext.match(/1.19.4/);
+  if (matchesWrongVersions) {
+    return [
+      'Incompatible with that version of Minecraft',
+      "Steam 'n' Rails is currently only compatible with MC 1.18.2 and 1.19.2.",
+    ];
+  }
+  return null;
+};
+
+const analyzers: Analyzer[] = [optifineAnalyzer, versionAnalyzer];
 
 const providers: LogProvider[] = [
   readMcLogs,
