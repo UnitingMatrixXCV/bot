@@ -28,13 +28,17 @@ export const handleWebhook = (client: Client, req: Request, res: Response) => {
     if (req.body.action === 'in_progress') {
         // this is run on the workflow_run webhook event
         // when the workflow is started
-        actionStart(client, req);
+        if (isBuildRun(req)) {
+            actionStart(client, req);
+        }
     }
 
     if (req.body.action === 'completed') {
         // this is run on the workflow_run webhook event
         // when the workflow is completed
-        actionCompleted(client, req);
+        if (isBuildRun(req)) {
+            actionCompleted(client, req);
+        }
     }
 
     res.status(200).send('Webhook received successfully');
@@ -171,7 +175,7 @@ const generateCommitsString = (head_sha: string) => {
         .map((commit) => {
             const committer = commit.committer;
             const userProfile = `https://github.com/${committer.username}`;
-            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile}))`;
+            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile})`;
         })
         .join('\n');
     return commitString;
@@ -230,4 +234,12 @@ const verify_signature = (req: Request) => {
         .update(JSON.stringify(req.body))
         .digest('hex');
     return `sha256=${signature}` === req.headers['x-hub-signature-256'];
+};
+
+const isBuildRun = (req: Request) => {
+    if (req.body.workflow_run.path == '.github/workflows/build.yml') {
+        return true;
+    } else {
+        return false;
+    }
 };
