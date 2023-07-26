@@ -11,6 +11,7 @@ import {
 const WEBHOOK_SECRET: string = process.env.GITHUB_SECRET!;
 
 const commitMap = new Map<number, string>();
+
 const githubMap = new Map<number, string>();
 
 export const handleWebhook = (client: Client, req: Request, res: Response) => {
