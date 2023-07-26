@@ -6,6 +6,7 @@ declare global {
             DISCORD_TOKEN: string;
             SAY_LOGS_CHANNEL: string;
             LOGS_CHANNEL: string;
+            MAVEN_REPO: string;
             GITHUB_STATUS_CHANNEL: string;
             GITHUB_SECRET: string;
             LOADING_EMOJI: string;
