@@ -58,15 +58,7 @@ const actionStart = async (client: Client, req: Request) => {
     const run_number = await getRunNumber(workflow_run.url);
     const version = await getVersion(workflow_run.url);
 
-    const commitsArray = commitMap.get(workflow_run.head_sha);
-    if (!commitsArray) return;
-    const commitString = commitsArray.commits
-        .map((commit) => {
-            const committer = commit.committer;
-            const userProfile = `https://github.com/${committer.username}`;
-            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile}))`;
-        })
-        .join('\n');
+    const commitString = generateCommitsString(workflow_run.head_sha);
 
     const embed = new EmbedBuilder()
         .setAuthor({
@@ -119,15 +111,7 @@ const actionCompleted = async (client: Client, req: Request) => {
         1000;
     const timeTaken = getTimeTaken(runTimeInSeconds);
 
-    const commitsArray = commitMap.get(workflow_run.head_sha);
-    if (!commitsArray) return;
-    const commitString = commitsArray.commits
-        .map((commit) => {
-            const committer = commit.committer;
-            const userProfile = `https://github.com/${committer.username}`;
-            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile}))`;
-        })
-        .join('\n');
+    const commitString = generateCommitsString(workflow_run.head_sha);
 
     const channel = await client.channels.fetch(
         process.env.GITHUB_STATUS_CHANNEL
@@ -178,6 +162,19 @@ const actionCompleted = async (client: Client, req: Request) => {
         oldMessage.edit({ embeds: [embed] });
         githubMap.delete(workflow_run.id);
     }
+};
+
+const generateCommitsString = (head_sha: string) => {
+    const commitsArray = commitMap.get(head_sha);
+    if (!commitsArray) return;
+    const commitString = commitsArray.commits
+        .map((commit) => {
+            const committer = commit.committer;
+            const userProfile = `https://github.com/${committer.username}`;
+            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile}))`;
+        })
+        .join('\n');
+    return commitString;
 };
 
 const getTimeTaken = (time: number) => {
