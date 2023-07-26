@@ -25,9 +25,9 @@ export const handleWebhook = (client: Client, req: Request, res: Response) => {
         actionPush(req);
     }
 
-    if (req.body.action === 'requested') {
+    if (req.body.action === 'in_progress') {
         // this is run on the workflow_run webhook event
-        // when the workflow is requested
+        // when the workflow is started
         if (isBuildRun(req)) {
             actionStart(client, req);
         }
@@ -59,7 +59,8 @@ const actionStart = async (client: Client, req: Request) => {
     const unix_started_at = Math.floor(
         Date.parse(workflow_run.run_started_at) / 1000
     );
-    const version = await getVersion(workflow_run.url, workflow_run.run_number);
+    const run_number = await getRunNumber(workflow_run.url);
+    const version = await getVersion(workflow_run.url);
 
     const commitString = generateCommitsString(workflow_run.head_sha);
 
@@ -71,7 +72,7 @@ const actionStart = async (client: Client, req: Request) => {
         })
         .setDescription(
             `## Build <t:${unix_started_at}:R>
-            Status: Build is running for **#${workflow_run.run_number}** ${process.env.LOADING_EMOJI}
+            Status: Build is running for **#${run_number}** ${process.env.LOADING_EMOJI}
             Version: ${version}
             ${commitString}
             `
@@ -99,7 +100,8 @@ const actionCompleted = async (client: Client, req: Request) => {
     const unix_started_at = Math.floor(
         Date.parse(workflow_run.run_started_at) / 1000
     );
-    const version = await getVersion(workflow_run.url, workflow_run.run_number);
+    const run_number = await getRunNumber(workflow_run.url);
+    const version = await getVersion(workflow_run.url);
 
     const status =
         workflow_run.conclusion === 'success'
@@ -132,7 +134,7 @@ const actionCompleted = async (client: Client, req: Request) => {
         })
         .setDescription(
             `## Build <t:${unix_started_at}:R>
-            Status: **${status} #${workflow_run.run_number}** in ${timeTaken}
+            Status: **${status} #${run_number}** in ${timeTaken}
             Version: ${version}
             ${commitString}
             `
@@ -195,7 +197,13 @@ const getTimeTaken = (time: number) => {
     return timeTaken;
 };
 
-const getVersion = async (apiurl: URL, run_number: string) => {
+const getRunNumber = async (url: URL) => {
+    const request = await fetch(url);
+    const data = await request.json();
+    return data.run_number;
+};
+
+const getVersion = async (apiurl: URL) => {
     const runDataRequest = await fetch(apiurl);
     const runData = await runDataRequest.json();
 
@@ -212,7 +220,9 @@ const getVersion = async (apiurl: URL, run_number: string) => {
     if (modVersionLine && minecraftVersionLine) {
         const modVersion = modVersionLine.split('=')[1].trim();
         const minecraftVersion = minecraftVersionLine.split('=')[1].trim();
-        return `${modVersion}-mc${minecraftVersion}.${run_number}`;
+        return `${modVersion}-mc${minecraftVersion}.${await getRunNumber(
+            apiurl
+        )}`;
     } else {
         return "Couldn't find version";
     }
