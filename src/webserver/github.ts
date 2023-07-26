@@ -1,6 +1,12 @@
 import * as crypto from 'crypto';
 import { Request, Response } from 'express';
-import { Client, EmbedBuilder } from 'discord.js';
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    Client,
+    EmbedBuilder,
+} from 'discord.js';
 
 const WEBHOOK_SECRET: string = process.env.GITHUB_SECRET!;
 
@@ -31,6 +37,8 @@ const actionStart = async (client: Client, req: Request) => {
     const unix_started_at = Math.floor(
         Date.parse(workflow_run.run_started_at) / 1000
     );
+    const run_number = await getRunNumber(workflow_run.url);
+    const version = await getVersion(workflow_run.url);
 
     const embed = new EmbedBuilder()
         .setAuthor({
@@ -40,10 +48,8 @@ const actionStart = async (client: Client, req: Request) => {
         })
         .setDescription(
             `## Build <t:${unix_started_at}:R>
-            Status: Build is running for **#${await getRunNumber(
-                workflow_run.url
-            )}** ${process.env.LOADING_EMOJI}
-            Version: ${await getVersion(workflow_run.url)}
+            Status: Build is running for **#${run_number}** ${process.env.LOADING_EMOJI}
+            Version: ${version}
             `
         )
         .setFooter({
@@ -69,9 +75,20 @@ const actionCompleted = async (client: Client, req: Request) => {
     const unix_started_at = Math.floor(
         Date.parse(workflow_run.run_started_at) / 1000
     );
-    const runTime =
-        Date.parse(workflow_run.updated_at) -
-        Date.parse(workflow_run.created_at);
+    const run_number = await getRunNumber(workflow_run.url);
+    const version = await getVersion(workflow_run.url);
+
+    const status =
+        workflow_run.conclusion === 'success'
+            ? `${process.env.SUCCESS_EMOJI} Success`
+            : `${process.env.FAIL_EMOJI} Failed`;
+    const statusColor = workflow_run.conclusion === 'success' ? 'Green' : 'Red';
+
+    const runTimeInSeconds =
+        (Date.parse(workflow_run.updated_at) -
+            Date.parse(workflow_run.created_at)) /
+        1000;
+    const timeTaken = getTimeTaken(runTimeInSeconds);
 
     const channel = await client.channels.fetch(
         process.env.GITHUB_STATUS_CHANNEL!
@@ -82,13 +99,6 @@ const actionCompleted = async (client: Client, req: Request) => {
         githubMap.get(workflow_run.id)!
     );
 
-    const conclusion = workflow_run.conclusion === 'success' ? true : false;
-    const status =
-        workflow_run.conclusion === 'success'
-            ? `${process.env.SUCCESS_EMOJI} Success`
-            : `${process.env.FAIL_EMOJI} Failed`;
-    const statusColor = workflow_run.conclusion === 'success' ? 'Green' : 'Red';
-
     const embed = new EmbedBuilder()
         .setAuthor({
             name: `${repository.name}/${workflow_run.head_branch}`,
@@ -97,8 +107,8 @@ const actionCompleted = async (client: Client, req: Request) => {
         })
         .setDescription(
             `## Build <t:${unix_started_at}:R>
-            Status: **${status} #${await getRunNumber(workflow_run.url)}**
-            Version: ${await getVersion(workflow_run.url)}
+            Status: **${status} #${run_number}** in ${timeTaken}
+            Version: ${version}
             `
         )
         .setFooter({
@@ -107,8 +117,43 @@ const actionCompleted = async (client: Client, req: Request) => {
         })
         .setColor(statusColor);
 
-    oldMessage.edit({ embeds: [embed] });
-    githubMap.delete(workflow_run.id);
+    if (workflow_run.conclusion == 'success') {
+        const fabricButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setLabel('Fabric')
+            .setURL(`${process.env.MAVEN_REPO}`);
+        const forgeButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setLabel('Forge')
+            .setURL(`${process.env.MAVEN_REPO}`);
+
+        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+            fabricButton,
+            forgeButton
+        );
+
+        oldMessage.edit({ embeds: [embed], components: [actionRow] });
+        githubMap.delete(workflow_run.id);
+    } else {
+        oldMessage.edit({ embeds: [embed] });
+        githubMap.delete(workflow_run.id);
+    }
+};
+
+const getTimeTaken = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+
+    const minutesString =
+        minutes > 0 ? `${minutes} minute${minutes !== 1 ? 's' : ''}` : '';
+    const secondsString =
+        seconds > 0 ? `${seconds} second${seconds !== 1 ? 's' : ''}` : '';
+
+    const timeTaken = `${minutesString}${
+        minutesString && secondsString ? ' and ' : ''
+    }${secondsString}`;
+
+    return timeTaken;
 };
 
 const getRunNumber = async (url: URL) => {
