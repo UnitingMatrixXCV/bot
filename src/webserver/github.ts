@@ -7,28 +7,44 @@ import {
     Client,
     EmbedBuilder,
 } from 'discord.js';
+import { Commit } from '../types/github';
 
-const WEBHOOK_SECRET: string = process.env.GITHUB_SECRET!;
+const WEBHOOK_SECRET: string = process.env.GITHUB_SECRET;
 
-const commitMap = new Map<number, string>();
-
+const commitMap = new Map<string, Commit>();
 const githubMap = new Map<number, string>();
 
 export const handleWebhook = (client: Client, req: Request, res: Response) => {
-    // if (!verify_signature(req)) {
-    //     res.status(401).send('Unauthorized');
-    //     return;
-    // }
+    if (!verify_signature(req)) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+
+    if (req.body.ref) {
+        // This is run on the push webhook event
+        actionPush(req);
+    }
 
     if (req.body.action === 'in_progress') {
+        // this is run on the workflow_run webhook event
+        // when the workflow is started
         actionStart(client, req);
     }
 
     if (req.body.action === 'completed') {
+        // this is run on the workflow_run webhook event
+        // when the workflow is completed
         actionCompleted(client, req);
     }
 
     res.status(200).send('Webhook received successfully');
+};
+
+const actionPush = async (req: Request) => {
+    const commits = {
+        commits: req.body.commits,
+    };
+    commitMap.set(req.body.after, commits);
 };
 
 const actionStart = async (client: Client, req: Request) => {
@@ -42,6 +58,16 @@ const actionStart = async (client: Client, req: Request) => {
     const run_number = await getRunNumber(workflow_run.url);
     const version = await getVersion(workflow_run.url);
 
+    const commitsArray = commitMap.get(workflow_run.head_sha);
+    if (!commitsArray) return;
+    const commitString = commitsArray.commits
+        .map((commit) => {
+            const committer = commit.committer;
+            const userProfile = `https://github.com/${committer.username}`;
+            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile}))`;
+        })
+        .join('\n');
+
     const embed = new EmbedBuilder()
         .setAuthor({
             name: `${repository.name}/${workflow_run.head_branch}`,
@@ -52,6 +78,7 @@ const actionStart = async (client: Client, req: Request) => {
             `## Build <t:${unix_started_at}:R>
             Status: Build is running for **#${run_number}** ${process.env.LOADING_EMOJI}
             Version: ${version}
+            ${commitString}
             `
         )
         .setFooter({
@@ -61,7 +88,7 @@ const actionStart = async (client: Client, req: Request) => {
         .setColor('Blue');
 
     const channel = await client.channels.fetch(
-        process.env.GITHUB_STATUS_CHANNEL!
+        process.env.GITHUB_STATUS_CHANNEL
     );
     if (!channel?.isTextBased()) return;
     channel.send({ embeds: [embed] }).then((message) => {
@@ -92,8 +119,18 @@ const actionCompleted = async (client: Client, req: Request) => {
         1000;
     const timeTaken = getTimeTaken(runTimeInSeconds);
 
+    const commitsArray = commitMap.get(workflow_run.head_sha);
+    if (!commitsArray) return;
+    const commitString = commitsArray.commits
+        .map((commit) => {
+            const committer = commit.committer;
+            const userProfile = `https://github.com/${committer.username}`;
+            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile}))`;
+        })
+        .join('\n');
+
     const channel = await client.channels.fetch(
-        process.env.GITHUB_STATUS_CHANNEL!
+        process.env.GITHUB_STATUS_CHANNEL
     );
     if (!channel?.isTextBased()) return;
     if (!githubMap.has(workflow_run.id)) return;
@@ -111,6 +148,7 @@ const actionCompleted = async (client: Client, req: Request) => {
             `## Build <t:${unix_started_at}:R>
             Status: **${status} #${run_number}** in ${timeTaken}
             Version: ${version}
+            ${commitString}
             `
         )
         .setFooter({
