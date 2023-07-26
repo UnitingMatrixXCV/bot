@@ -178,9 +178,11 @@ const actionCompleted = async (client: Client, req: Request) => {
 };
 
 const generateCommitsString = (head_sha: string) => {
+    if (!commitMap.get(head_sha)) {
+        return 'No commits found';
+    }
     const commitsArray = commitMap.get(head_sha);
     if (!commitsArray) return;
-    if (commitsArray.commits.length == 0) return;
     const commitString = commitsArray.commits
         .map((commit) => {
             const committer = commit.committer;
