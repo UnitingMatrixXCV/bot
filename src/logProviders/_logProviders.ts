@@ -6,11 +6,11 @@ import { hastebin } from './haste';
 import { pastebin } from './pastebin';
 
 export const logProviders: LogProvider[] = [
-  mcLoGs,
-  r0x0,
-  pasteGG,
-  hastebin,
-  pastebin,
+    mcLoGs,
+    r0x0,
+    pasteGG,
+    hastebin,
+    pastebin,
 ];
 
 export default logProviders;
