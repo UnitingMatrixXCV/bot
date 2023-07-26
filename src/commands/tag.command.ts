@@ -1,11 +1,8 @@
-import {
-  EmbedBuilder,
-  SlashCommandBuilder,
-} from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { getTags, getTagsSync } from '../handlers/tag.handler';
 import { Command } from '../handlers/command.handler';
 
-const tags = getTagsSync()
+const tags = getTagsSync();
 
 export const tagCommand: Command = {
   // @ts-expect-error idk why it gives an error
@@ -54,4 +51,4 @@ export const tagCommand: Command = {
       embeds: [embed],
     });
   },
-}
+};

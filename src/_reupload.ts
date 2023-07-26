@@ -1,3 +1,3 @@
-import { reloadGlobalSlashCommands } from "./handlers/command.handler";
+import { reloadGlobalSlashCommands } from './handlers/command.handler';
 
-reloadGlobalSlashCommands()
+reloadGlobalSlashCommands();

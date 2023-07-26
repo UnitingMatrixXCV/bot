@@ -37,8 +37,8 @@ export const getTags = async (): Promise<Tag[]> => {
 };
 
 export const getTagsSync = (): Tag[] => {
-  const filenames = readdirSync(TAG_DIR)
-  const tags: Tag[] = []
+  const filenames = readdirSync(TAG_DIR);
+  const tags: Tag[] = [];
 
   for (const _file of filenames) {
     const file = join(TAG_DIR, _file);
@@ -53,4 +53,4 @@ export const getTagsSync = (): Tag[] => {
   }
 
   return tags;
-}
+};

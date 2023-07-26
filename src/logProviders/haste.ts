@@ -1,16 +1,18 @@
-import { LogProvider } from "../handlers/log.handler";
+import { LogProvider } from '../handlers/log.handler';
 
-const reg = /https:\/\/0x0.st\/\w*.\w*/;
+const reg = /https:\/\/hst.sh\/[\w]*/;
 
-export const r0x0: LogProvider = {
-  hostnames: ["0x0.st"],
+export const hastebin: LogProvider = {
+  hostnames: ['hst.sh'],
   async parse(text) {
     const r = text.match(reg);
     if (r == null || !r[0]) return;
     const link = r[0];
+    const id = link.replace('https://hst.sh/', '');
+    if (!id) return;
     let log: string;
     try {
-      const f = await fetch(link);
+      const f = await fetch(`https://hst.sh/raw/${id}`);
       if (f.status != 200) {
         throw 'nope';
       }
@@ -21,4 +23,4 @@ export const r0x0: LogProvider = {
     }
     return log;
   },
-}
+};

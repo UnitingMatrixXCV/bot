@@ -1,4 +1,4 @@
-export { };
+export {};
 
 declare global {
     namespace NodeJS {
@@ -6,6 +6,13 @@ declare global {
             DISCORD_TOKEN: string;
             SAY_LOGS_CHANNEL: string;
             LOGS_CHANNEL: string;
+            GITHUB_STATUS_CHANNEL: string;
+            GITHUB_SECRET: string;
+            LOADING_EMOJI: string;
+            SUCCESS_EMOJI: string;
+            FAIL_EMOJI: string;
+            WEBSERVER_PORT: string;
+            NODE_ENV: 'development' | 'production';
         }
     }
 }

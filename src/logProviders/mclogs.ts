@@ -1,10 +1,9 @@
-import { LogProvider } from "../handlers/log.handler";
+import { LogProvider } from '../handlers/log.handler';
 
 const reg = /https:\/\/mclo.gs\/\w*/;
 
-
 export const mcLoGs: LogProvider = {
-  hostnames: ["mclo.gs"],
+  hostnames: ['mclo.gs'],
   async parse(text) {
     const r = text.match(reg);
     if (r == null || !r[0]) return;
@@ -25,4 +24,4 @@ export const mcLoGs: LogProvider = {
     }
     return log;
   },
-}
+};

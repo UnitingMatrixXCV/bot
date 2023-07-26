@@ -9,7 +9,7 @@ export const sayCommand: Command = {
   data: new SlashCommandBuilder()
     .setName('say')
     .setDescription('Say something through the bot')
-    .addStringOption(option =>
+    .addStringOption((option) =>
       option
         .setName('content')
         .setDescription('Just content?')
@@ -20,8 +20,7 @@ export const sayCommand: Command = {
   async execute(interaction) {
     if (!interaction.guild || !interaction.channel) return;
 
-
-    const content = interaction.options.get('content', true).value as string
+    const content = interaction.options.get('content', true).value as string;
     await interaction.deferReply({ ephemeral: true });
     const message = await interaction.channel.send(content);
     await interaction.editReply('I said what you said!');
@@ -46,5 +45,5 @@ export const sayCommand: Command = {
         ],
       });
     }
-  }
-}
+  },
+};

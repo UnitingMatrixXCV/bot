@@ -1,10 +1,7 @@
-import { Command } from "../handlers/command.handler"
-import { sayCommand } from "./say.command"
-import { tagCommand } from "./tag.command"
+import { Command } from '../handlers/command.handler';
+import { sayCommand } from './say.command';
+import { tagCommand } from './tag.command';
 
-export const commands: Command[] = [
-    sayCommand,
-    tagCommand
-]
+export const commands: Command[] = [sayCommand, tagCommand];
 
-export default commands
+export default commands;
