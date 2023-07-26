@@ -30,11 +30,16 @@ client.once('ready', async () => {
 
         if (!logsChannel?.isTextBased()) return;
 
+        const mode =
+            process.env.NODE_ENV === 'development'
+                ? 'development'
+                : 'production';
+
         const embed = new EmbedBuilder()
             .setDescription(
                 `## Bot is ready!
                 Time: <t:${Math.floor(Date.now() / 1000)}:R>
-                Running in **${process.env.NODE_ENV}** mode
+                Running in **${mode}** mode
                 Webserver running on port: **${process.env.WEBSERVER_PORT}**
                 OS: **${process.platform}**
                 CPU Architecture: **${process.arch}**
