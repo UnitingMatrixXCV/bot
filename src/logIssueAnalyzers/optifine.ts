@@ -1,6 +1,6 @@
-import { LogAnalyzer } from '../handlers/log.handler';
+import { Analyzer } from '../handlers/log.handler';
 
-export const optifineAnalyzer: LogAnalyzer = async (text) => {
+export const optifineAnalyzer: Analyzer = async (text) => {
     const matchesOptifine = text.match(/f_174747_/);
     if (matchesOptifine) {
         return {
