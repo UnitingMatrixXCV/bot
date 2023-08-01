@@ -150,10 +150,18 @@ const actionCompleted = async (client: Client, req: Request) => {
             'minecraft'
         );
 
-        const versionFabric = `${mod_version}+fabric-mc${minecraft_version}-build.${workflow_run.run_number}`;
-        const versionForge = `${mod_version}+forge-mc${minecraft_version}-build.${workflow_run.run_number}`;
-        const fabricJar = `${process.env.MAVEN_REPO}${versionFabric}/Steam_Rails-${versionFabric}.jar`;
-        const forgeJar = `${process.env.MAVEN_REPO}${versionForge}/Steam_Rails-${versionForge}.jar`;
+        const fabricJar = generateMavenUrl(
+            mod_version,
+            minecraft_version,
+            workflow_run.run_number,
+            'fabric'
+        );
+        const forgeJar = generateMavenUrl(
+            mod_version,
+            minecraft_version,
+            workflow_run.run_number,
+            'forge'
+        );
 
         const fabricButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Link)
@@ -175,6 +183,17 @@ const actionCompleted = async (client: Client, req: Request) => {
         oldMessage.edit({ embeds: [embed] });
         githubMap.delete(workflow_run.id);
     }
+};
+
+const generateMavenUrl = (
+    mod_version: string,
+    minecraft_version: string,
+    run_number: string,
+    loaderType: string
+) => {
+    const baseRepo = process.env.MAVEN_REPO;
+    const modVersion = `${mod_version}+${loaderType}-mc${minecraft_version}-build.${run_number}`;
+    return `${baseRepo}/Steam_Rails-${loaderType}/${modVersion}/Steam_Rails-${loaderType}-${modVersion}.jar`;
 };
 
 const generateCommitsString = (head_sha: string) => {
