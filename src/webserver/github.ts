@@ -72,7 +72,7 @@ const actionStart = async (client: Client, req: Request) => {
         .setDescription(
             `## Build <t:${unix_started_at}:R>
             Status: Build is running for **#${workflow_run.run_number}** ${process.env.LOADING_EMOJI}
-            Version: ${version}
+            Version: **${version}**
             ${commitString}
             `
         )
@@ -133,7 +133,7 @@ const actionCompleted = async (client: Client, req: Request) => {
         .setDescription(
             `## Build <t:${unix_started_at}:R>
             Status: **${status} #${workflow_run.run_number}** in ${timeTaken}
-            Version: ${version}
+            Version: **${version}**
             ${commitString}
             `
         )
@@ -245,7 +245,7 @@ const getVersion = async (apiurl: URL, run_number: string) => {
     if (modVersionLine && minecraftVersionLine) {
         const modVersion = modVersionLine.split('=')[1].trim();
         const minecraftVersion = minecraftVersionLine.split('=')[1].trim();
-        return `${modVersion}-mc${minecraftVersion}.${run_number}`;
+        return `${modVersion}-mc${minecraftVersion}-build.${run_number}`;
     } else {
         return "Couldn't find version";
     }
