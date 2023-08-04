@@ -193,7 +193,7 @@ const generateMavenUrl = (
 ) => {
     const baseRepo = process.env.MAVEN_REPO;
     const modVersion = `${mod_version}+${loaderType}-mc${minecraft_version}-build.${run_number}`;
-    return `${baseRepo}/Steam_Rails-${loaderType}-${mod_version}/${modVersion}/Steam_Rails-${loaderType}-${mod_version}-${modVersion}.jar`;
+    return `${baseRepo}/Steam_Rails-${loaderType}-${minecraft_version}/${modVersion}/Steam_Rails-${loaderType}-${minecraft_version}-${modVersion}.jar`;
 };
 
 const generateCommitsString = (head_sha: string) => {
