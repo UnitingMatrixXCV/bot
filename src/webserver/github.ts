@@ -206,9 +206,16 @@ const generateCommitsString = (head_sha: string) => {
         .map((commit) => {
             const committer = commit.committer;
             const userProfile = `https://github.com/${committer.username}`;
-            return `[➤](${commit.url}) ${commit.message} - [${committer.username}](${userProfile})`;
+            const messageWithoutHashtag = commit.message.replace(/#/g, ''); // Remove all '#' symbols
+            return `[➤](${commit.url}) ${messageWithoutHashtag} - [${committer.username}](${userProfile})`;
         })
         .join('\n');
+
+    if (commitString.length > 3072) {
+        const url = `https://github.com/Layers-of-Railways/Railway/commits/${head_sha}`;
+        return `Commits are too long to display please check [here](${url})`;
+    }
+
     return commitString;
 };
 
