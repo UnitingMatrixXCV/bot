@@ -3,6 +3,7 @@ import { Client, GatewayIntentBits, Partials, EmbedBuilder } from 'discord.js';
 import 'dotenv/config';
 import commandHandler from './handlers/command.handler';
 import { logHandler } from './handlers/log.handler';
+import { reloadGlobalSlashCommands } from './handlers/command.handler';
 import './webserver';
 
 export const client = new Client({
@@ -81,4 +82,11 @@ for (const handler of handlers) {
     handler(client);
 }
 
-client.login(process.env.DISCORD_TOKEN);
+reloadGlobalSlashCommands()
+    .then(() => {
+        client.login(process.env.DISCORD_TOKEN);
+    })
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    });
