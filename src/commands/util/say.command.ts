@@ -3,7 +3,7 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from 'discord.js';
-import { Command } from '../handlers/command.handler';
+import { Command } from '../../handlers/command.handler';
 
 export const sayCommand: Command = {
     data: new SlashCommandBuilder()

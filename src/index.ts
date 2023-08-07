@@ -1,4 +1,10 @@
-import { Client, GatewayIntentBits, Partials, EmbedBuilder } from 'discord.js';
+import {
+    Client,
+    GatewayIntentBits,
+    Partials,
+    EmbedBuilder,
+    Events,
+} from 'discord.js';
 
 import 'dotenv/config';
 import commandHandler from './handlers/command.handler';
@@ -20,7 +26,7 @@ export const client = new Client({
     partials: [Partials.Channel],
 });
 
-client.once('ready', async () => {
+client.once(Events.ClientReady, async () => {
     console.log('Discord bot ready!');
 
     if (process.env.LOGS_CHANNEL) {

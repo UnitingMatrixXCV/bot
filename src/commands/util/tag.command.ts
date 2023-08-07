@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { getTags, getTagsSync } from '../handlers/tag.handler';
-import { Command } from '../handlers/command.handler';
+import { getTags, getTagsSync } from '../../handlers/tag.handler';
+import { Command } from '../../handlers/command.handler';
 
 const tags = getTagsSync();
 

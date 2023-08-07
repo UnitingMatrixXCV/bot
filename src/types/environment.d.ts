@@ -13,6 +13,7 @@ declare global {
             SUCCESS_EMOJI: string;
             FAIL_EMOJI: string;
             WEBSERVER_PORT: string;
+            DATABASE_URL: string;
             NODE_ENV: 'development' | 'production';
         }
     }

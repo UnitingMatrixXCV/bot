@@ -8,6 +8,7 @@ import {
     Collection,
     EmbedBuilder,
     RESTGetAPIOAuth2CurrentApplicationResult,
+    Events,
 } from 'discord.js';
 import * as color from 'colorette';
 import commands from '../commands/_commands';
@@ -76,7 +77,7 @@ export async function reloadGlobalSlashCommands() {
 }
 
 const commandHandler: Handler = (client) => {
-    client.on('interactionCreate', async (interaction) => {
+    client.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isCommand()) return; // make sure that the interaction came from a command
         if (!commandCollection.has(interaction.commandName)) return; // and that the command exist on this app
 
