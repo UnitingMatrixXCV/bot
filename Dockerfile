@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-RUN prisma migrate deploy
+RUN npx prisma migrate deploy
 
 COPY . .
 CMD [ "pnpm", "run", "start" ]
