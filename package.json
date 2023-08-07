@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
         "start": "tsx src/index.ts",
+        "build:schema": "prisma generate --schema=prisma/schema.prisma",
         "lint": "tsc && eslint . && prettier --check ."
     },
     "dependencies": {
