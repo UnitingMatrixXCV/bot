@@ -63,9 +63,7 @@ export const warnCommand: Command = {
             await prisma.warning.create({
                 data: {
                     reason: reason.value as string,
-                    issuer: {
-                        connect: { id: interaction.user.id },
-                    },
+                    issuerId: interaction.user.id,
                     User: {
                         connect: { id: member.id },
                     },

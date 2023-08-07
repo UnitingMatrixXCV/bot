@@ -8,16 +8,14 @@ datasource db {
 }
 
 model User {
-  id             String    @id @unique
-  warnings       Warning[]
-  issuedWarnings Warning[] @relation("Issuer")
+  id       String    @id @unique
+  warnings Warning[]
 }
 
 model Warning {
   id        String   @id @default(uuid())
   reason    String
   timestamp DateTime @default(now())
-  issuer    User     @relation("Issuer", fields: [issuerId], references: [id])
   issuerId  String
   User      User     @relation(fields: [userId], references: [id])
   userId    String
