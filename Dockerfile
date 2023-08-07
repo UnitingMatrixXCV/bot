@@ -10,7 +10,5 @@ COPY prisma ./prisma/
 
 RUN pnpm install --frozen-lockfile
 
-RUN npx prisma generate
-
 COPY . .
 CMD [ "pnpm", "run", "start" ]

@@ -57,6 +57,8 @@ jobs:
                   labels: ${{ steps.meta.outputs.labels }}
                   platforms: ${{ matrix.platform }}
                   outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
 
             - name: Export digests
               run: |
