@@ -46,7 +46,7 @@ export const deleteWarningCommand: Command = {
                     const embed = new EmbedBuilder()
                         .setTitle(`Warning removed`)
                         .setDescription(
-                            `Your warning with id ${warningId} was removed`
+                            `Your warning with id \`${warningId}\` was removed`
                         )
                         .setColor(Colors.Green)
                         .setTimestamp();
