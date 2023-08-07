@@ -10,10 +10,10 @@ COPY prisma ./prisma/
 
 RUN pnpm install --frozen-lockfile
 
-RUN prisma generate
+RUN npx prisma generate
 
 COPY . .
 
-RUN prisma migrate deploy
+RUN pnpm run migrate
 
 CMD [ "pnpm", "run", "start" ]
