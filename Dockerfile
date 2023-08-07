@@ -14,6 +14,4 @@ RUN npx prisma generate
 
 COPY . .
 
-RUN pnpm run migrate
-
 CMD [ "pnpm", "run", "start" ]
