@@ -29,6 +29,8 @@ export const deleteWarningCommand: Command = {
                 where: { id: warningId },
             });
 
+            const reason = warning?.reason;
+
             if (warning) {
                 await prisma.warning.delete({
                     where: { id: warningId },
@@ -46,7 +48,7 @@ export const deleteWarningCommand: Command = {
                     const embed = new EmbedBuilder()
                         .setTitle(`Warning removed`)
                         .setDescription(
-                            `Your warning with id \`${warningId}\` was removed`
+                            `Your warning with reason: ${reason} was removed`
                         )
                         .setColor(Colors.Green)
                         .setTimestamp();
