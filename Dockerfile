@@ -7,7 +7,9 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-RUN pnpm run build:schema
+COPY prisma/schema.prisma prisma/
+
+RUN prisma generate --schema=prisma/schema.prisma
 
 COPY . .
 CMD [ "pnpm", "run", "start" ]
