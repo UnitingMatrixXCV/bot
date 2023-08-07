@@ -50,11 +50,11 @@ export const warnCommand: Command = {
         }
 
         try {
-            const user = await prisma.user.findUnique({
+            const userRecord = await prisma.user.findUnique({
                 where: { id: member.id },
             });
 
-            if (!user) {
+            if (!userRecord) {
                 await prisma.user.create({
                     data: { id: member.id },
                 });
