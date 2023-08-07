@@ -35,7 +35,8 @@ export const listWarningsCommand: Command = {
             if (user) {
                 const embed = new EmbedBuilder()
                     .setTitle(`Warnings for ${member.user.username}`)
-                    .setColor(Colors.Red);
+                    .setColor(Colors.Red)
+                    .setTimestamp();
                 user.warnings.forEach((warning) => {
                     embed.addFields({
                         name: `ID: ${warning.id}`,

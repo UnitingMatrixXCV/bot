@@ -39,30 +39,33 @@ export const deleteWarningCommand: Command = {
                 });
 
                 if (user) {
-                    await interaction.client.users
-                        .fetch(user.id)
-                        .then(async (user) => {
-                            const embed = new EmbedBuilder()
-                                .setTitle(`Warning removed`)
-                                .setDescription(
-                                    `Your warning with id ${warningId} was removed`
-                                )
-                                .setColor(Colors.Green);
+                    const member = await interaction.client.users.fetch(
+                        user.id
+                    );
 
-                            user.send({
-                                embeds: [embed],
-                            });
-                        });
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Warning removed`)
+                        .setDescription(
+                            `Your warning with id ${warningId} was removed`
+                        )
+                        .setColor(Colors.Green)
+                        .setTimestamp();
+
+                    member.send({
+                        embeds: [embed],
+                    });
+
+                    const delEmbed = new EmbedBuilder()
+                        .setTitle(
+                            `Deleted warning with id ${warningId} for ${member.username}`
+                        )
+                        .setColor(Colors.Red);
+
+                    await interaction.reply({
+                        embeds: [delEmbed],
+                        ephemeral: true,
+                    });
                 }
-
-                const embed = new EmbedBuilder()
-                    .setTitle(`Deleted warning with id ${warningId}`)
-                    .setColor(Colors.Red);
-
-                await interaction.reply({
-                    embeds: [embed],
-                    ephemeral: true,
-                });
             } else {
                 await interaction.reply({
                     content: `Warning with id ${warningId} not found`,
