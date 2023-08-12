@@ -65,7 +65,6 @@ export const deleteWarningCommand: Command = {
 
                     await interaction.reply({
                         embeds: [delEmbed],
-                        ephemeral: true,
                     });
                 }
             } else {
