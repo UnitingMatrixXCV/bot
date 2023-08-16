@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
         "start": "prisma migrate deploy && tsx src/index.ts",
-        "lint": "tsc && eslint . && prettier --check ."
+        "lint": "tsc && eslint . && prettier --check .",
+        "lint:fix": "prettier --write ."
     },
     "dependencies": {
         "@discordjs/rest": "1.7.1",
