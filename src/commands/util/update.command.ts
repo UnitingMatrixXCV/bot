@@ -4,7 +4,7 @@ import { Command } from '../../handlers/command.handler';
 
 export const updateCommand: Command = {
     data: new SlashCommandBuilder()
-        .setName('restart')
+        .setName('update')
         .setDescription('Update the bot')
         .setDMPermission(false),
     async execute(interaction) {
