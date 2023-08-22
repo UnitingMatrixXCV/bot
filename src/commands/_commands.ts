@@ -4,7 +4,6 @@ import { listWarningsCommand } from './moderation/listwarnings.command';
 import { warnCommand } from './moderation/warn.command';
 import { sayCommand } from './util/say.command';
 import { tagCommand } from './util/tag.command';
-import { updateCommand } from './util/update.command';
 
 export const commands: Command[] = [
     sayCommand,
@@ -12,7 +11,6 @@ export const commands: Command[] = [
     warnCommand,
     listWarningsCommand,
     deleteWarningCommand,
-    updateCommand,
 ];
 
 export default commands;
