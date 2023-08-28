@@ -4,6 +4,7 @@ declare global {
     namespace NodeJS {
         interface ProcessEnv {
             DISCORD_TOKEN: string;
+            OWNER_ID: string;
             SAY_LOGS_CHANNEL: string;
             LOGS_CHANNEL: string;
             MAVEN_REPO: string;

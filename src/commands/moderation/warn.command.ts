@@ -90,7 +90,6 @@ export const warnCommand: Command = {
 
             await interaction.reply({
                 embeds: [warnEmbed],
-                ephemeral: true,
             });
         } catch (error) {
             console.error('Error creating warning:', error);
