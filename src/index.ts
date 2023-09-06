@@ -10,6 +10,7 @@ import 'dotenv/config';
 import commandHandler from './handlers/command.handler';
 import { logHandler } from './handlers/log.handler';
 import { reloadGlobalSlashCommands } from './handlers/command.handler';
+import serverCheckHandler from './handlers/serverCheck.handler';
 import './webserver';
 
 export const client = new Client({
@@ -82,7 +83,8 @@ client.once(Events.ClientReady, async () => {
 
 export type Handler = (client: Client<false>) => void;
 
-const handlers: Handler[] = [commandHandler, logHandler];
+const handlers: Handler[] = [commandHandler, logHandler, serverCheckHandler];
+//const handlers: Handler[] = [commandHandler, logHandler];
 
 for (const handler of handlers) {
     handler(client);

@@ -1,0 +1,12 @@
+{
+    "AUTO_INTERVAL": 60,
+    "MANUAL_COOLDOWN": 10,
+    "Server": {
+        "Name": "Main Server",
+        "Address": "104.223.108.156:25565",
+        "Links": {
+            "Curseforge Download": "https://curseforge.com/minecraft/modpacks/create-steam-n-rails-server-pack",
+            "MMC/Prism Download": "https://cdn.discordapp.com/attachments/1074423808427040778/1120036630774939668/Railways_prism.zip"
+        }
+    }
+}

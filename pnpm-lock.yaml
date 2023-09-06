@@ -26,6 +26,9 @@ dependencies:
   tsx:
     specifier: 3.12.7
     version: 3.12.7
+  xmlhttprequest:
+    specifier: ^1.8.0
+    version: 1.8.0
 
 devDependencies:
   '@types/express':
@@ -2192,6 +2195,11 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  /xmlhttprequest@1.8.0:
+    resolution: {integrity: sha512-58Im/U0mlVBLM38NdZjHyhuMtCqa61469k2YP/AaPbvCoV9aQGUpbJBj1QRm2ytRiVQBD/fsw7L2bJGDVQswBA==}
+    engines: {node: '>=0.4.0'}
     dev: false
 
   /yallist@4.0.0:
